@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model category {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @db.Char(100)
+  created_at         DateTime             @db.DateTime(0)
+  product_categories product_categories[]
+}
+
+model discount {
+  id              Int           @id @default(autoincrement())
+  type            discount_type
+  value           Float         @db.Float
+  number_of_use   Float?        @db.Float
+  expiration_date DateTime?     @db.DateTime(0)
+  created_at      DateTime?     @db.DateTime(0)
+  admin_id        String        @db.Char(255)
+  user            user          @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_discount_user1")
+
+  @@index([admin_id], map: "fk_discount_user1_idx")
+}
+
+model product {
+  id                 Int                  @id @default(autoincrement())
+  title              String               @db.Char(100)
+  description        String               @db.Text
+  statut             product_statut
+  price              Float                @db.Float
+  stock              Float                @default(0) @db.Float
+  images             Json
+  reference          String               @db.Char(100)
+  created_at         DateTime             @db.DateTime(0)
+  product_categories product_categories[]
+  product_supplier   product_supplier[]
+  wishlist           wishlist[]
+}
+
+model product_categories {
+  product_id  Int
+  category_id Int
+  category    category @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_has_category_category1")
+  product     product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_product_has_category_product1")
+
+  @@id([product_id, category_id])
+  @@index([category_id], map: "fk_product_has_category_category1_idx")
+  @@index([product_id], map: "fk_product_has_category_product1_idx")
+}
+
+model product_supplier {
+  supplier_id Int
+  product_id  Int
+  product     product  @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_supplier_has_product_product1")
+  supplier    supplier @relation(fields: [supplier_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_supplier_has_product_supplier1")
+
+  @@id([supplier_id, product_id])
+  @@index([product_id], map: "fk_supplier_has_product_product1_idx")
+  @@index([supplier_id], map: "fk_supplier_has_product_supplier1_idx")
+}
+
+model supplier {
+  id               Int                @id @default(autoincrement())
+  company_name     String             @db.Char(100)
+  country          String             @db.Char(100)
+  website_url      String?            @db.Char(255)
+  product_supplier product_supplier[]
+}
+
+model user {
+  id                 String               @id @db.Char(255)
+  email              String               @db.Char(255)
+  name               String               @db.Char(50)
+  lastname           String               @db.Char(50)
+  username           String               @db.VarChar(75)
+  image              String               @db.Text
+  created_at         DateTime             @db.DateTime(0)
+  discount           discount[]
+  user_login_history user_login_history[]
+  wishlist           wishlist[]
+}
+
+model user_login_history {
+  id         Int      @id @default(autoincrement())
+  User_id    String   @db.Char(255)
+  created_at DateTime @db.DateTime(0)
+  user       user     @relation(fields: [User_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_User_login_history_User")
+
+  @@index([User_id], map: "fk_User_login_history_User_idx")
+}
+
+model wishlist {
+  user_id    String  @db.Char(255)
+  product_id Int
+  product    product @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wishlist_product1")
+  user       user    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wishlist_user1")
+
+  @@id([product_id, user_id])
+  @@index([product_id], map: "fk_wishlist_product1_idx")
+  @@index([user_id], map: "fk_wishlist_user1_idx")
+}
+
+enum discount_type {
+  percentage
+  value
+}
+
+enum product_statut {
+  PUBLISHED
+  DRAFT
+}
