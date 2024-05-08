@@ -1,7 +1,7 @@
 import { ConfigService } from "@cosmoosjs/core";
 import type { Prisma } from "@prisma/client";
+import { exclude } from "@utils/exclude.util";
 import { inject, injectable } from "inversify";
-import { exclude } from "src/utils/exclude.util";
 import { AuthRepository } from "./auth.repository";
 
 @injectable()

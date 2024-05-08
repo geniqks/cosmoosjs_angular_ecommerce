@@ -13,9 +13,10 @@
   "dependencies": {
     "@cosmoosjs/core": "^1.1.6",
     "@cosmoosjs/hono-openapi": "^1.1.8",
-    "@prisma/client": "^5.13.0",
     "@hono/sentry": "^1.0.1",
+    "@prisma/client": "^5.13.0",
     "dotenv": "^16.4.5",
+    "hono": "^4.1.1",
     "hono-rate-limiter": "^0.2.3",
     "http-status-codes": "^2.3.0",
     "inversify": "^6.0.2",

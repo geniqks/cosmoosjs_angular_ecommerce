@@ -1,6 +1,6 @@
+import { PrismaProvider } from "@libs/providers/prisma";
 import type { Prisma, user } from "@prisma/client";
 import { inject, injectable } from "inversify";
-import { PrismaProvider } from "../prisma";
 
 @injectable()
 export class AuthRepository {

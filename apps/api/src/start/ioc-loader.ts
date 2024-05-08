@@ -1,10 +1,12 @@
 import { ControllerRoot } from "@app/controllers";
 import { AuthRootController } from "@app/controllers/auth/auth-root.controller";
+import { AuthRepository } from "@libs/auth/auth.repository";
+import { AuthService } from "@libs/auth/auth.service";
+import { TestGuard } from "@libs/guards/test.guard";
+import { PrismaProvider } from "@libs/providers/prisma";
+import { SocketProvider } from "@libs/providers/sockets";
 import type { Container } from "inversify";
-import { AuthRepository } from "src/libs/auth/auth.repository";
-import { AuthService } from "src/libs/auth/auth.service";
-import { TestGuard } from "src/libs/guards/test.guard";
-import { PrismaProvider } from "src/libs/prisma";
+
 
 /**
  * This file will list all the application's injectables. 
@@ -18,5 +20,6 @@ export default (container: Container) => {
   container.bind(AuthService).toSelf().inRequestScope();
   container.bind(ControllerRoot).toSelf().inRequestScope();
   container.bind(PrismaProvider).toSelf().inSingletonScope();
+  container.bind(SocketProvider).toSelf().inSingletonScope();
   container.bind(TestGuard).toSelf().inRequestScope();
 };

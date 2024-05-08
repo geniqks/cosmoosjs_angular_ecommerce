@@ -2,6 +2,7 @@ import { ControllerRoot } from '@app/controllers';
 import type { ConfigService, IBootstrapConfig } from '@cosmoosjs/core';
 import { AppFactory, IocContainer, LoggerService } from '@cosmoosjs/core';
 import type { FactoryOASMetadatas } from '@cosmoosjs/hono-openapi';
+import { SocketProvider, websocket } from '@libs/providers/sockets';
 import { serve } from 'bun';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -53,15 +54,20 @@ const boostrapApp = async () => {
 boostrapApp().then((httpConfig) => {
   const logger = IocContainer.container.get(LoggerService);
   const controllerRoot = IocContainer.container.get(ControllerRoot);
+  const socket = IocContainer.container.get(SocketProvider);
   try {
     serve({
       async fetch(req, server) {
         const serverConfig = await httpConfig?.fetch(req, { ip: server.requestIP(req) });
         return serverConfig;
       },
+      websocket,
       port: httpConfig?.port,
     });
+    // Initialize the socket
+    socket.initSocket();
 
+    // Setup all controllers
     controllerRoot.setup();
     logger.pino.info(`Hono 🥟 Server Listening on port ${httpConfig?.port}`);
   } catch (e) {
