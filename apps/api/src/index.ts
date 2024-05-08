@@ -58,7 +58,9 @@ boostrapApp().then((httpConfig) => {
   try {
     serve({
       async fetch(req, server) {
-        const serverConfig = await httpConfig?.fetch(req, { ip: server.requestIP(req) });
+        const untypedServer = server as unknown as any
+        untypedServer.ip = server.requestIP(req)
+        const serverConfig = await httpConfig?.fetch(req, untypedServer);
         return serverConfig;
       },
       websocket,
