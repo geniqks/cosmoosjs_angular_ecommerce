@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   protected hidePassword!: boolean;
   protected validateInput = validateInput;
   protected apiAuthService = inject(AuthService);
+  protected isLoading!: boolean
 
   constructor(private authService: SocialAuthService) { }
 
@@ -56,6 +57,7 @@ export class RegisterComponent implements OnInit {
   }
 
   private handleLocalRegister() {
+    this.isLoading = true;
     console.log('handleLocalRegister');
     this.apiAuthService.authRegisterPost({
       body: {
@@ -68,7 +70,7 @@ export class RegisterComponent implements OnInit {
     }).subscribe((data) => {
       console.log('data');
       console.log(data);
-
+      this.isLoading = false;
     })
     // Lorsque l'utilisateur ce connecte avec email et mot de passe
     // Lancer la logique habituelle d'une connexion

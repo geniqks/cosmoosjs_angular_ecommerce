@@ -46,7 +46,12 @@
     </div>
 
     <div class="mt-4">
-      <button class="btn btn-primary w-100" type="submit">Sign In</button>
+      <div class="d-flex justify-content-center" *ngIf="isLoading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <button class="btn btn-primary w-100" type="submit" *ngIf="!isLoading">Sign In</button>
     </div>
 
     <div class="mt-4 pt-2 text-center">
