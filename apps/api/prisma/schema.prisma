@@ -21,7 +21,7 @@ model discount {
   number_of_use   Float?        @db.Float
   expiration_date DateTime?     @db.DateTime(0)
   created_at      DateTime?     @db.DateTime(0)
-  admin_id        String        @db.Char(255)
+  admin_id        Int
   user            user          @relation(fields: [admin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_discount_user1")
 
   @@index([admin_id], map: "fk_discount_user1_idx")
@@ -73,12 +73,13 @@ model supplier {
 }
 
 model user {
-  id                 String               @id @db.Char(255)
+  id                 Int                  @id @default(autoincrement())
   email              String               @db.Char(255)
+  password           String               @db.Char(255)
   name               String               @db.Char(50)
   lastname           String               @db.Char(50)
   username           String               @db.VarChar(75)
-  image              String               @db.Text
+  image              String?              @db.Text
   created_at         DateTime             @db.DateTime(0)
   discount           discount[]
   user_login_history user_login_history[]
@@ -87,7 +88,7 @@ model user {
 
 model user_login_history {
   id         Int      @id @default(autoincrement())
-  User_id    String   @db.Char(255)
+  User_id    Int
   created_at DateTime @db.DateTime(0)
   user       user     @relation(fields: [User_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_User_login_history_User")
 
@@ -95,7 +96,7 @@ model user_login_history {
 }
 
 model wishlist {
-  user_id    String  @db.Char(255)
+  user_id    Int
   product_id Int
   product    product @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wishlist_product1")
   user       user    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wishlist_user1")

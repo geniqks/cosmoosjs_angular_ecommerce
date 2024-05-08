@@ -1,5 +1,8 @@
 import { ControllerRoot } from "@app/controllers";
+import { AuthRootController } from "@app/controllers/auth/auth-root.controller";
 import type { Container } from "inversify";
+import { AuthRepository } from "src/libs/auth/auth.repository";
+import { AuthService } from "src/libs/auth/auth.service";
 import { TestGuard } from "src/libs/guards/test.guard";
 import { PrismaProvider } from "src/libs/prisma";
 
@@ -10,6 +13,9 @@ import { PrismaProvider } from "src/libs/prisma";
  * @link https://inversify.io/
  */
 export default (container: Container) => {
+  container.bind(AuthRepository).toSelf().inRequestScope();
+  container.bind(AuthRootController).toSelf().inRequestScope();
+  container.bind(AuthService).toSelf().inRequestScope();
   container.bind(ControllerRoot).toSelf().inRequestScope();
   container.bind(PrismaProvider).toSelf().inSingletonScope();
   container.bind(TestGuard).toSelf().inRequestScope();

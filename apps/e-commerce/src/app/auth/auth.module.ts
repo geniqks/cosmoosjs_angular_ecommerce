@@ -2,10 +2,11 @@ import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig,
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { FormModule } from '../shared/forms/form.module';
 import { AuthRoutingModule } from './auth.routing.module';
+import { AuthLayoutComponent } from './components/auth-layout/auth-layout.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { AuthLayoutComponent } from './components/auth-layout/auth-layout.component';
 
 const declarations = [
   AuthLayoutComponent,
@@ -17,6 +18,7 @@ const declarations = [
 @NgModule({
   imports: [
     CommonModule,
+    FormModule,
     GoogleSigninButtonModule,
     SocialLoginModule,
     AuthRoutingModule,

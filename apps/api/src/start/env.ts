@@ -18,5 +18,6 @@ export default {
   ORIGINS: Environment.validator.string(),
   PORT: Environment.validator.string().transform(Number),
   REDIS_URL: Environment.validator.string(),
+  SALT_ROUND: Environment.validator.string().transform(Number),
   SENTRY_DSN: Environment.validator.string(),
 }

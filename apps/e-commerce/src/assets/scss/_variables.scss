@@ -1010,7 +1010,7 @@ $input-focus-color: $input-color;
 $input-focus-width: $input-btn-focus-width;
 $input-focus-box-shadow: $input-btn-focus-box-shadow;
 
-$input-placeholder-color: var(--#{$prefix}tertiary-color);
+$input-placeholder-color: var($gray-600);
 $input-plaintext-color: var(--#{$prefix}tertiary-color);
 
 $input-height-border: calc($input-border-width * 2);

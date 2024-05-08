@@ -3,9 +3,9 @@ import { injectable } from "inversify";
 
 @injectable()
 export class PrismaProvider {
-  private client = new PrismaClient();
+  private _client = new PrismaClient();
 
-  public getClient() {
-    return this.client;
+  public get client() {
+    return this._client;
   }
 }

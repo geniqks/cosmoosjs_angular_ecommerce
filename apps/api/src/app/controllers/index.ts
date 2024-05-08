@@ -1,12 +1,19 @@
 import { Get, Guards } from '@cosmoosjs/hono-openapi';
 import type * as hono from 'hono';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import type { IController } from 'src/interfaces/controllers/controller.interface';
 import { TestGuard } from 'src/libs/guards/test.guard';
+import { AuthRootController } from './auth/auth-root.controller';
 
 @injectable()
-export class ControllerRoot {
+export class ControllerRoot implements IController {
+
+  constructor(
+    @inject(AuthRootController) private readonly authRootController: AuthRootController,
+  ) { }
 
   public setup(): void {
+    this.authRootController.setup();
     this.helloWorld();
   }
 

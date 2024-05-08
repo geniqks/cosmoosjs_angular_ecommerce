@@ -1,0 +1,83 @@
+{
+  "info": {
+    "title": "E-commerce API",
+    "version": "v1"
+  },
+  "openapi": "3.1.0",
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "AuthRegisterInputSchema": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "name",
+          "lastname",
+          "email",
+          "password"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "responses": {}
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRegisterInputSchema"
+              }
+            }
+          }
+        },
+        "responses": {}
+      }
+    },
+    "/": {
+      "get": {
+        "responses": {}
+      }
+    }
+  }
+}
