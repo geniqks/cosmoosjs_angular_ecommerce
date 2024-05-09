@@ -75,11 +75,11 @@ model supplier {
 
 model user {
   id                 Int                  @id @default(autoincrement())
-  email              String               @db.Char(255)
+  email              String               @unique @db.Char(255)
   password           String               @db.Char(255)
   name               String               @db.Char(50)
   lastname           String               @db.Char(50)
-  username           String               @db.VarChar(75)
+  username           String               @unique @db.VarChar(75)
   image              String?              @db.Text
   created_at         DateTime             @db.DateTime(0)
   discount           discount[]
