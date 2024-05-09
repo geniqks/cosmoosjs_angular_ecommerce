@@ -40,6 +40,7 @@
               "./../../node_modules/slick-carousel/slick/slick-theme.scss",
               "./../../node_modules/slick-carousel/slick/slick.scss",
               "./../../node_modules/leaflet/dist/leaflet.css",
+              "./../../node_modules/ngx-toastr/toastr.css",
               "src/assets/scss/bootstrap.scss",
               "src/assets/themes/mytheme/theme.css",
               "src/assets/scss/app.scss",
