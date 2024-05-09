@@ -2,7 +2,7 @@ import { GoogleLoginProvider, GoogleSigninButtonModule, SocialAuthServiceConfig,
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { FormModule } from '../shared/forms/form.module';
+import { FormModule } from '../shared/bootstrap/forms/form.module';
 import { AuthRoutingModule } from './auth.routing.module';
 import { AuthLayoutComponent } from './components/auth-layout/auth-layout.component';
 import { LoginComponent } from './components/login/login.component';
@@ -14,14 +14,19 @@ const declarations = [
   RegisterComponent,
 ];
 
+const imported = [
+  CommonModule,
+  FormModule,
+  GoogleSigninButtonModule,
+  SocialLoginModule,
+  AuthRoutingModule,
+];
+
+
 // TODO: add client id to environment
 @NgModule({
   imports: [
-    CommonModule,
-    FormModule,
-    GoogleSigninButtonModule,
-    SocialLoginModule,
-    AuthRoutingModule,
+    ...imported
   ],
   providers: [
     {

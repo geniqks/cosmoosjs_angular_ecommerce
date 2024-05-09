@@ -1,31 +1,25 @@
+import { HttpClientModule } from "@angular/common/http";
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-
-import { HttpClient, HttpClientModule } from "@angular/common/http";
-
+import { ToastrModule } from 'ngx-toastr';
+import { SharedModule } from "primeng/api";
+import { ApiModule } from "./api/api.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-
-import { SharedModule } from "primeng/api";
-
-// Language
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { ApiModule } from "./api/api.module";
-
-export function createTranslateLoader(http: HttpClient): any {
-  return new TranslateHttpLoader(http, "assets/i18n/", ".json");
-}
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
+    ApiModule.forRoot({ rootUrl: "http://localhost:3000" }),
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedModule,
+    BrowserModule,
     HttpClientModule,
-    ApiModule.forRoot({ rootUrl: "http://localhost:3000" }),
+    SharedModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-left'
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
