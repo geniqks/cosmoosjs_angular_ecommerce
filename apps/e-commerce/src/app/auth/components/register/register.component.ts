@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
 
   public ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
+      console.log('cc')
       this.handleGoogleRegister(user)
     });
     this.initForm();
@@ -54,6 +55,21 @@ export class RegisterComponent implements OnInit {
     // Lorsque l'utilisateur ce connecte avec google
     // Vérifier si il existe dans la bdd sinon le créer
     // Le connecter
+    console.log('dd')
+    console.log(user);
+    this.apiAuthService.authRegisterPost({
+      body: {
+        email: user.email,
+        lastname: user.lastName,
+        name: user.firstName,
+        password: Math.random().toString(36).slice(-8),
+        username: `${user.firstName.toLocaleLowerCase()}.${user.lastName.toLocaleLowerCase()}`
+      }
+    }).subscribe((data) => {
+      console.log('data');
+      console.log(data);
+      this.isLoading = false;
+    })
   }
 
   private handleLocalRegister() {
