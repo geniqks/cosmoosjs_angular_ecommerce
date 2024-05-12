@@ -26,8 +26,7 @@ export class OtpComponent implements OnInit {
 
   private initForm() {
     this.form = new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
+      otp: new FormControl('', [Validators.required, Validators.minLength(4)]),
     });
   }
 

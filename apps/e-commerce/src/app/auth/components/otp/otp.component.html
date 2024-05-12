@@ -4,8 +4,10 @@
 </div>
 
 <div class="my-3">
-  <p-inputOtp />
-</div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <p-inputOtp class="mb-3" formControlName="otp" />
 
-<button [disabled]="form.invalid" pButton pRipple label="{{ 'auth.validateLogin' | translate }}"
-  icon="pi pi-check"></button>
+    <button [disabled]="form.invalid" pButton pRipple label="{{ 'auth.validateLogin' | translate }}"
+      icon="pi pi-check"></button>
+  </form>
+</div>
