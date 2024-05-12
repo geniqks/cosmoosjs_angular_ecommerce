@@ -1,17 +1,14 @@
 import { GoogleLoginProvider, SocialAuthService } from "@abacritt/angularx-social-login";
 import { Component, type OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { EmailValidator } from '@shared/validators/email.validator';
+import { EmailValidator } from "@app/shared/validators/email.validator";
 
 @Component({
-  selector: "app-auth-register",
-  templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"],
+  selector: "app-auth-forgot-password",
+  templateUrl: "./forgot-password.component.html",
 })
-export class RegisterComponent implements OnInit {
+export class ForgotPasswordComponent implements OnInit {
   protected form!: FormGroup;
-  protected isLoading!: boolean;
-  protected passwordMinLength = 8;
   constructor(private authService: SocialAuthService) { }
 
   public ngOnInit(): void {
@@ -27,13 +24,7 @@ export class RegisterComponent implements OnInit {
 
   private initForm() {
     this.form = new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      firstname: new FormControl('', [Validators.required]),
-      lastname: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.pattern(EmailValidator.pattern)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      hasReadContracts: new FormControl(false, Validators.requiredTrue),
-      enablePromotionalMails: new FormControl(false),
     });
   }
 

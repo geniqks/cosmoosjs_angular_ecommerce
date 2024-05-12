@@ -1,73 +1,84 @@
-<p class="text-muted fs-15">Sign in to continue to Toner.</p>
-<div class="p-2">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" class="form-control" formControlName="username" id="username" placeholder="Enter username"
-        required />
-      <div class="invalid-feedback" *ngIf="form.controls['username'].hasError('exist')">
-        Username already exist
-      </div>
-    </div>
-
-    <div class="mb-3 row">
-      <div class="col-6">
-        <label for="firstname" class="form-label">Prenom</label>
-        <input type="text" formControlName="firstname" class="form-control" id="firstname" required
-          placeholder="prenom" />
-      </div>
-      <div class="col-6">
-        <label for="lastname" class="form-label">Nom</label>
-        <input type="text" formControlName="lastname" class="form-control" id="lastname" required placeholder="nom" />
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" formControlName="email" id="email" placeholder="1234@gmail.com"
-        required />
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label" for="password-input">Password</label>
-      <div class="position-relative auth-pass-inputgroup mb-3">
-        <input #passwordInput type="password" formControlName="password"
-          (input)="validateInput(form, 'password' ,passwordInput)" [type]="hidePassword ? 'text' : 'password'"
-          class="form-control bg-light pe-5 password-input " placeholder="Enter password" id="password-input" required>
-        <div class="invalid-feedback" *ngIf="form.get('password')?.getError('minlength')">
-          password cannot be less than {{ form.get('password')?.getError('minlength').requiredLength }} characters
-        </div>
-        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
-          type="button" id="password-addon">
-          <i class="align-middle" [ngClass]="{'ri-eye-off-fill': !hidePassword, 'ri-eye-line': hidePassword}"
-            (click)="togglePasswordSwitch()"></i>
-        </button>
-      </div>
-    </div>
-
-    <div class="mt-4">
-      <div class="d-flex justify-content-center" *ngIf="isLoading">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-      <button class="btn btn-primary w-100" type="submit" *ngIf="!isLoading">Sign In</button>
-    </div>
-
-    <div class="mt-4 pt-2 text-center">
-      <div class="signin-other-title">
-        <h5 class="fs-13 mb-4 title">Inscription avec</h5>
-      </div>
-      <div class="pt-2 hstack gap-2 justify-content-center">
-        <asl-google-signin-button type='icon' shape="rectangular" logo_alignment="center" theme="outline" size='large'>
-        </asl-google-signin-button>
-      </div>
-    </div>
-  </form>
-
-  <div class="text-center mt-5">
-    <p class="mb-0">Vous avez déja un compte ? <a routerLink="/auth/login"
-        class="fw-semibold text-secondary text-decoration-underline"> SignUp</a>
-    </p>
-  </div>
+<div class="mb-5">
+  <h1>{{ 'auth.register' | translate }}</h1>
+  <p>{{ 'auth.alreadyRegistered' | translate}} <a href="#">{{ 'auth.connectHere' | translate }}</a></p>
 </div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="flex">
+    <div class="flex flex-column gap-2">
+      <label for="username" class="required-field">{{ 'auth.pseudo' | translate }}</label>
+      <input type="text" pInputText formControlName="username" id="username" />
+      <small class="p-error block" *ngIf="form.get('username')?.invalid && form.get('username')?.dirty">
+        {{ 'validation.requiredField' | translate }}
+      </small>
+    </div>
+  </div>
+
+  <div class="grid my-4">
+    <div class="col flex">
+      <div class="flex flex-column gap-2">
+        <label for="firstname" class="required-field">{{ 'auth.firstname' | translate }}</label>
+        <input type="text" pInputText formControlName="firstname" id="firstname" />
+        <small class="p-error block" *ngIf="form.get('firstname')?.invalid && form.get('firstname')?.dirty">
+          {{ 'validation.requiredField' | translate }}
+        </small>
+      </div>
+    </div>
+
+    <div class="col flex">
+      <div class="flex flex-column gap-2">
+        <label for="lastname" class="required-field">Nom</label>
+        <input type="text" pInputText formControlName="lastname" id="lastname" />
+        <small class="p-error block" *ngIf="form.get('lastname')?.invalid && form.get('lastname')?.dirty">
+          {{ 'validation.requiredField' | translate }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-4 flex">
+    <div class="flex flex-column gap-2">
+      <label for="email" class="required-field">{{ 'auth.email' | translate }}</label>
+      <input type="email" pInputText formControlName="email" id="email" placeholder="123@gmail.com" email />
+    </div>
+  </div>
+
+  <div class="my-4 flex">
+    <div class="flex flex-column gap-2 ">
+      <label for="password" class="required-field">{{ 'auth.password' | translate }}</label>
+      <p-password formControlName="password" [toggleMask]="true" id="password">
+        <ng-template pTemplate="footer">
+          <p-divider></p-divider>
+          <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+            <span class="mr-2">
+              <i class="pi pi-check" style="color: green" *ngIf="password.length >= passwordMinLength"></i>
+              <i class="pi pi-times" style="color: red" *ngIf="password.length < passwordMinLength"></i>
+            </span>
+            <span translate [translateParams]="{value: passwordMinLength}">validation.minimumLength</span>
+          </ul>
+        </ng-template>
+      </p-password>
+    </div>
+  </div>
+
+  <div class="my-4 flex flex-column">
+    <div class="contract-section">
+      <p-checkbox formControlName="hasReadContracts" binary="true" class="mr-2" />
+      <label class="required-field">{{ 'auth.contracts' | translate }}</label>
+    </div>
+    <div class="contract-section">
+      <p-checkbox formControlName="enablePromotionalMails" binary="true" class="mr-2" />
+      <label>{{ 'auth.promotionalMails' | translate }}</label>
+    </div>
+  </div>
+
+  <button *ngIf="!isLoading" [disabled]="form.invalid" pButton pRipple label="{{ 'auth.register' | translate }}"
+    icon="pi pi-check"></button>
+  <p-progressSpinner *ngIf="isLoading" styleClass="w-2rem h-2rem" strokeWidth="4" animationDuration=".5s" />
+
+  <p-divider />
+
+  <div class="flex justify-content-center">
+    <asl-google-signin-button type='standard' shape="rectangular" logo_alignment="center" theme="outline" size='large'>
+    </asl-google-signin-button>
+  </div>
+</form>

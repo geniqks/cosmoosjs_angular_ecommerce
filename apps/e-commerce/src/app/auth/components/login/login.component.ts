@@ -1,33 +1,43 @@
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Component } from '@angular/core';
+import { GoogleLoginProvider, SocialAuthService } from "@abacritt/angularx-social-login";
+import { Component, type OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 @Component({
-  selector: 'app-auth-login',
-  templateUrl: './login.component.html',
+  selector: "app-auth-login",
+  templateUrl: "./login.component.html",
 })
-export class LoginComponent {
-
-  protected fieldTextType!: boolean;
-
+export class LoginComponent implements OnInit {
+  protected form!: FormGroup;
   constructor(private authService: SocialAuthService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
-      console.log(user)
+      console.log(user);
     });
-
-    // Lorsque l'utilisateur ce connecte avec google
-    // Vérifier si il existe dans la bdd sinon le créer
-    // Le connecter
-
-    // Lorsque l'utilisateur ce connecte avec email et mot de passe
-    // Lancer la logique habituelle d'une connexion
+    this.initForm();
   }
 
-  /**
-   * Password Hide/Show
-  */
-  protected toggleFieldTextType() {
-    this.fieldTextType = !this.fieldTextType;
+  protected get password(): string {
+    return this.form.get('password')?.value;
+  }
+
+  private initForm() {
+    this.form = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+    });
+  }
+
+  protected onSubmit(): void {
+    if (this.form.valid) {
+      console.log('Form submitted');
+      console.log(this.form.value);
+    } else {
+      console.log('Form not submitted');
+    }
+  }
+
+  private signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 }

@@ -1,32 +1,8 @@
-<section
-  class="auth-page-wrapper position-relative bg-light min-vh-100 d-flex align-items-center justify-content-between">
-  <!-- Header -->
-  <div class="w-100">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-6">
-          <div class="auth-card mx-lg-3">
-            <div class="card border-0 mb-0">
-              <div class="card-header bg-primary border-0">
-                <div class="row">
-                  <div class="col-lg-4 col-3">
-                    <img src="assets/images/auth/img-1.png" alt="" class="img-fluid" />
-                  </div>
-                  <div class="col-lg-8 col-9">
-                    <h1 class="text-white lh-base fw-lighter">Join Our Toner Store</h1>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body">
-                <router-outlet></router-outlet>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--end col-->
-      </div>
-      <!--end row-->
-    </div>
-    <!--end container-->
+<div class="grid grid-nogutter h-full auth-layout">
+  <div class="col-12 p-0 pl-2 lg:col-6 md:pl-6 flex align-items-center">
+    <router-outlet></router-outlet>
   </div>
-</section>
+  <div class="hidden lg:flex lg:col-6 p-0	">
+    <img class="auth-rigth-image" src="/assets/img/auth/auth-background.webp" alt="Image">
+  </div>
+</div>

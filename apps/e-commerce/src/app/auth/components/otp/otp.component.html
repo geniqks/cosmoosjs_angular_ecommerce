@@ -1,0 +1,11 @@
+<div class="mb-5">
+  <h1>{{ 'auth.otp' | translate }}</h1>
+  <p>{{ 'auth.otpDescription' | translate}}</p>
+</div>
+
+<div class="my-3">
+  <p-inputOtp />
+</div>
+
+<button [disabled]="form.invalid" pButton pRipple label="{{ 'auth.validateLogin' | translate }}"
+  icon="pi pi-check"></button>

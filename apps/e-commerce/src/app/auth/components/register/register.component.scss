@@ -1,0 +1,7 @@
+.contract-section {
+  font-size: small;
+}
+
+.contract-section:not(:last-child) {
+  margin-bottom: 3px;
+}
