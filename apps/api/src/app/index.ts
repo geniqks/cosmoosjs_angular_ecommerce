@@ -3,6 +3,7 @@ import { Server } from '@cosmoosjs/hono-openapi';
 import { setupRateLimit } from './middlewares/rate-limit';
 import { setupHttpSecurity } from './middlewares/security';
 import { setupSentry } from './middlewares/sentry';
+import { loadSockets } from './middlewares/socket/load-socket';
 
 export default async () => {
   const configServer = IocContainer.container.get(ConfigService);
@@ -10,5 +11,6 @@ export default async () => {
 
   setupHttpSecurity(server, configServer);
   setupSentry(server, configServer);
+  loadSockets()
   await setupRateLimit(server, configServer);
 };
