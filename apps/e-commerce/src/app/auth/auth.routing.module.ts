@@ -10,6 +10,11 @@ import { ResetPasswordComponent } from "./components/reset-password/reset-passwo
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     component: AuthLayoutComponent,
     children: [
       {
