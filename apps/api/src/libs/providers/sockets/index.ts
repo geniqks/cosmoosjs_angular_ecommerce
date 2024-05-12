@@ -39,7 +39,7 @@ export class SocketProvider {
     this._events.push(newEvent);
   }
 
-  private async triggerEvent(event: WSMessageReceive): Promise<unknown> {
+  private async eventHandler(event: WSMessageReceive): Promise<unknown> {
     try {
       const data = JSON.parse(event.toString());
       if (data) {
@@ -60,11 +60,13 @@ export class SocketProvider {
       '/ws',
       upgradeWebSocket(() => {
         return {
-          /**
-           * an event should always 
-           */
+          onOpen(event) {
+            console.log('onOpen');
+          },
+          /* an event should always have the structure from the interface ReceviedMessage */
           onMessage: async (event, ws) => {
-            const response = await this.triggerEvent(event.data);
+            console.log(event.data);
+            const response = await this.eventHandler(event.data);
             if (response || response === false) {
               ws.send(JSON.stringify(response));
             }

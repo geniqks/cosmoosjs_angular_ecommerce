@@ -7,6 +7,7 @@ import {
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { WebsocketModule } from "@app/shared/websockets/websocket.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -47,6 +48,7 @@ const primengImports = [
 const imported = [
   TranslateModule,
   CommonModule,
+  WebsocketModule,
   FormsModule,
   ReactiveFormsModule,
   GoogleSigninButtonModule,

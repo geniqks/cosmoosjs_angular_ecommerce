@@ -1,6 +1,7 @@
 import { GoogleLoginProvider, SocialAuthService } from "@abacritt/angularx-social-login";
-import { Component, type OnInit } from "@angular/core";
+import { Component, inject, type OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from "@app/api/services";
 
 @Component({
   selector: "app-auth-login",
@@ -8,7 +9,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 })
 export class LoginComponent implements OnInit {
   protected form!: FormGroup;
-  constructor(private authService: SocialAuthService) { }
+  protected apiAuthService = inject(AuthService);
+  protected authService = inject(SocialAuthService)
 
   public ngOnInit(): void {
     this.authService.authState.subscribe((user) => {

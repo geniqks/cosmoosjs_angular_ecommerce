@@ -6,9 +6,10 @@
   <div class="flex">
     <div class="flex flex-column gap-2">
       <label for="username" class="required-field">{{ 'auth.pseudo' | translate }}</label>
-      <input type="text" pInputText formControlName="username" id="username" />
+      <input type="text" (change)="isUsernameAvailable($event)" pInputText formControlName="username" id="username" />
       <small class="p-error block" *ngIf="form.get('username')?.invalid && form.get('username')?.dirty">
-        {{ 'validation.requiredField' | translate }}
+        <span *ngIf="form.get('username')?.errors?.['required']">{{ 'validation.requiredField' | translate }}</span>
+        <span *ngIf="form.get('username')?.errors?.['usernameExist']">l'utilisatyeur existe déjà</span>
       </small>
     </div>
   </div>

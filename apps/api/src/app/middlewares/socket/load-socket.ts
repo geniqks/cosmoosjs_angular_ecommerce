@@ -7,7 +7,7 @@ const eventsLoader = [
 ]
 
 /** Load application event into the socket provider */
-export async function loadSockets() {
+export async function loadSocketsEvents() {
   for (const events of eventsLoader) {
     const loadedEvent = await events;
     if (Array.isArray(loadedEvent.default)) {

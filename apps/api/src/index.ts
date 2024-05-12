@@ -66,6 +66,7 @@ boostrapApp().then((httpConfig) => {
       websocket,
       port: httpConfig?.port,
     });
+
     // Initialize the socket
     socket.initSocket();
 

@@ -3,6 +3,7 @@ import { HttpResponse } from "@angular/common/http";
 import { Component, inject, type OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@app/api/services";
+import { WebsocketService } from "@app/shared/websockets/services/websocket.service";
 import { TranslateService } from "@ngx-translate/core";
 import { EmailValidator } from '@shared/validators/email.validator';
 import { MessageService } from "primeng/api";
@@ -20,6 +21,7 @@ export class RegisterComponent implements OnInit {
   protected authService = inject(SocialAuthService)
   private messageService = inject(MessageService);
   private translateService = inject(TranslateService);
+  private websocketService = inject(WebsocketService);
 
   public ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
@@ -48,6 +50,21 @@ export class RegisterComponent implements OnInit {
   protected onSubmit(): void {
     if (this.form.valid) {
       this.handleLocalRegister()
+    }
+  }
+
+  public isUsernameAvailable(event: Event): void {
+    const typedEvent = event.target as HTMLInputElement;
+    if (typedEvent.value) {
+      this.websocketService.send({ event: 'user_exist', data: typedEvent.value });
+      this.websocketService.messages.subscribe((response) => {
+        console.log('response', response)
+        console.log(this.form.get('username')?.errors);
+        if (response) {
+          this.form.get('username')?.setErrors({ usernameExist: true });
+        }
+        this.form.updateValueAndValidity();
+      });
     }
   }
 
