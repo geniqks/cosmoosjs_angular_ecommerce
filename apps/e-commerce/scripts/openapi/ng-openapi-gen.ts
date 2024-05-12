@@ -8,6 +8,7 @@ const options: Options = {
 }
 
 // load the openapi-spec and resolve all $refs
+// @ts-ignore
 const RefParser = new $RefParser();
 const openApi = await RefParser.bundle(options.input, {
   dereference: { circular: false }
