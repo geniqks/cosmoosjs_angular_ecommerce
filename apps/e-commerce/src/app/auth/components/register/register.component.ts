@@ -61,7 +61,9 @@ export class RegisterComponent implements OnInit {
         console.log('response', response)
         console.log(this.form.get('username')?.errors);
         if (response) {
-          this.form.get('username')?.setErrors({ usernameExist: true });
+          this.form.get('username')?.setErrors({ 'usernameExist': true });
+        } else {
+          this.form.get('username')?.setErrors(null);
         }
         this.form.updateValueAndValidity();
       });

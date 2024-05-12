@@ -9,7 +9,7 @@
       <input type="text" (change)="isUsernameAvailable($event)" pInputText formControlName="username" id="username" />
       <small class="p-error block" *ngIf="form.get('username')?.invalid && form.get('username')?.dirty">
         <span *ngIf="form.get('username')?.errors?.['required']">{{ 'validation.requiredField' | translate }}</span>
-        <span *ngIf="form.get('username')?.errors?.['usernameExist']">l'utilisatyeur existe déjà</span>
+        <span *ngIf="form.get('username')?.errors?.['usernameExist']">{{ 'auth.usernameIsTaken' | translate }}</span>
       </small>
     </div>
   </div>
@@ -63,12 +63,13 @@
 
   <div class="my-4 flex flex-column">
     <div class="contract-section">
-      <p-checkbox formControlName="hasReadContracts" binary="true" class="mr-2" />
-      <label class="required-field">{{ 'auth.contracts' | translate }}</label>
+      <p-checkbox formControlName="hasReadContracts" binary="true" class="mr-2" inputId="hasReadContracts" />
+      <label class="required-field" for="hasReadContracts">{{ 'auth.contracts' | translate }}</label>
     </div>
     <div class="contract-section">
-      <p-checkbox formControlName="enablePromotionalMails" binary="true" class="mr-2" />
-      <label>{{ 'auth.promotionalMails' | translate }}</label>
+      <p-checkbox formControlName="enablePromotionalMails" binary="true" class="mr-2"
+        inputId="enablePromotionalMails" />
+      <label for="enablePromotionalMails">{{ 'auth.promotionalMails' | translate }}</label>
     </div>
   </div>
 
