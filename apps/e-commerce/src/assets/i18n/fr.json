@@ -19,7 +19,8 @@
     "otp": "Code de vérification",
     "otpDescription": "Un code de vérification a été envoyé à votre adresse email",
     "newPassword": "Nouveau mot de passe",
-    "validateLogin": "Valider la connexion"
+    "validateLogin": "Valider la connexion",
+    "registerSuccess": "Votre compte a été créé avec succès, vous pouvez maintenant vous connecter"
   },
   "validation": {
     "requiredField": "Champ obligatoire",
