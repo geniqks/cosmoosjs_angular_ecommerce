@@ -1,4 +1,4 @@
-import { GoogleLoginProvider, SocialAuthService } from "@abacritt/angularx-social-login";
+import { SocialAuthService } from "@abacritt/angularx-social-login";
 import { Component, type OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
@@ -38,9 +38,5 @@ export class ResetPasswordComponent implements OnInit {
     } else {
       console.log('Form not submitted');
     }
-  }
-
-  private signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 }

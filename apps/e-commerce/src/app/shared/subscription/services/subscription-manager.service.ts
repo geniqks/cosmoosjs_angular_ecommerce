@@ -8,4 +8,5 @@ export class SubscriptionManager implements OnDestroy {
   public ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
 }
