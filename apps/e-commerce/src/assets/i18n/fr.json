@@ -21,6 +21,7 @@
     "newPassword": "Nouveau mot de passe",
     "validateLogin": "Valider la connexion",
     "usernameIsTaken": "Cet utilisateur est déjà pris",
+    "emailIsTaken": "Cet email est déjà pris",
     "registerSuccess": "Votre compte a été créé avec succès, vous pouvez maintenant vous connecter"
   },
   "validation": {
