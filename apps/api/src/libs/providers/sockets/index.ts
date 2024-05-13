@@ -1,25 +1,20 @@
 import { LoggerService } from "@cosmoosjs/core";
 import { Server } from "@cosmoosjs/hono-openapi";
+import type { ISocketMessage } from "@packages/types";
 import { createBunWebSocket } from 'hono/bun';
 import type { WSMessageReceive } from "hono/ws";
 import { inject, injectable } from "inversify";
-
 export const { upgradeWebSocket, websocket } = createBunWebSocket()
 
-export interface SocketEvent {
+export interface SocketEvent<T> {
   event: string,
-  callback: (data: ReceviedMessage) => any
+  callback: (data: ISocketMessage<T>) => unknown
 };
-
-interface ReceviedMessage {
-  event: string,
-  data: unknown
-}
 
 @injectable()
 export class SocketProvider {
 
-  private _events: SocketEvent[] = [];
+  private _events: SocketEvent<unknown>[] = [];
 
   constructor(
     @inject(Server) private readonly server: Server,
@@ -30,7 +25,7 @@ export class SocketProvider {
    * @param newEvent event name
    * @param initiator Class that initiates the event
    */
-  public addEvent(newEvent: SocketEvent) {
+  public addEvent(newEvent: SocketEvent<unknown>) {
     const hasEvent = this._events.find(e => e.event === newEvent.event);
     if (hasEvent) {
       this.loggerService.pino.warn(`Event ${newEvent} already exists`);

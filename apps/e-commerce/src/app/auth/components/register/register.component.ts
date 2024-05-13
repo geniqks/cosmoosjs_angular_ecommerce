@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@app/api/services";
 import { WebsocketService } from "@app/shared/websockets/services/websocket.service";
 import { TranslateService } from "@ngx-translate/core";
+import { ISocketReceivedMessage } from "@packages/types";
 import { EmailValidator } from '@shared/validators/email.validator';
 import { MessageService } from "primeng/api";
 
@@ -53,20 +54,39 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  public isUsernameAvailable(event: Event): void {
+  protected isUsernameAvailable(event: Event): void {
+    this.availableHelper(event, 'username', 'usernameExist');
+  }
+
+  protected isEmailAvailable(event: Event): void {
+    this.availableHelper(event, 'email', 'emailIsTaken');
+  }
+
+  private availableHelper(event: Event, controlName: string, errorName: string): void {
     const typedEvent = event.target as HTMLInputElement;
     if (typedEvent.value) {
-      this.websocketService.send({ event: 'user_exist', data: typedEvent.value });
-      this.websocketService.messages.subscribe((response) => {
-        console.log('response', response)
-        console.log(this.form.get('username')?.errors);
+      this.websocketService.send<ISocketReceivedMessage>(
+        {
+          event: 'user_exist',
+          data: {
+            control: controlName,
+            value: typedEvent.value
+          }
+        }
+      );
+      this.websocketService.messages.subscribe(response => {
         if (response) {
-          this.form.get('username')?.setErrors({ 'usernameExist': true });
-        } else {
-          this.form.get('username')?.setErrors(null);
+          if (response.control === controlName) {
+            if (response.value) {
+              this.form.get(controlName)?.setErrors({ [errorName]: true });
+            } else {
+              this.form.get(controlName)?.setErrors(null);
+            }
+          }
         }
         this.form.updateValueAndValidity();
-      });
+      }
+      );
     }
   }
 

@@ -39,7 +39,11 @@
   <div class="my-4 flex">
     <div class="flex flex-column gap-2">
       <label for="email" class="required-field">{{ 'auth.email' | translate }}</label>
-      <input type="email" pInputText formControlName="email" id="email" placeholder="123@gmail.com" email />
+      <input type="email" (change)="isEmailAvailable($event)" pInputText formControlName="email" id="email"
+        placeholder="123@gmail.com" email />
+      <small class="p-error block" *ngIf="form.get('email')?.invalid && form.get('email')?.dirty">
+        <span *ngIf="form.get('email')?.errors?.['emailIsTaken']">{{ 'auth.emailIsTaken' | translate }}</span>
+      </small>
     </div>
   </div>
 

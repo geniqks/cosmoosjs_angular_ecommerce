@@ -1,5 +1,6 @@
 import { IocContainer } from "@cosmoosjs/core";
 import type { SocketEvent } from "@libs/providers/sockets";
+import type { ISocketReceivedMessage } from "@packages/types";
 import { UserRepository } from "./user.repository";
 
 export default [
@@ -8,12 +9,14 @@ export default [
     /**
      * @param event Should be the username
      */
-    callback: async (event) => {
-      if (typeof event.data === 'string') {
-        const userRepository = IocContainer.container.get(UserRepository);
-        const isExist = await userRepository.isExist(event.data);
-        return isExist;
-      }
+    callback: async (event): Promise<ISocketReceivedMessage> => {
+      const userRepository = IocContainer.container.get(UserRepository);
+      const isExist = await userRepository.isExist(event.data.value.toString());
+
+      return {
+        value: isExist,
+        control: event.data.control
+      };
     }
-  }
-] satisfies SocketEvent[];
+  } as SocketEvent<ISocketReceivedMessage>,
+] satisfies SocketEvent<ISocketReceivedMessage>[];

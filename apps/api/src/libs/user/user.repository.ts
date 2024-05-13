@@ -7,11 +7,16 @@ export class UserRepository {
     @inject(PrismaProvider) private readonly prisma: PrismaProvider
   ) { }
 
-  public async isExist(username: string): Promise<boolean> {
-    const isExist = await this.prisma.client.user.findUnique({
+  public async isExist(input: string): Promise<boolean> {
+    const isExist = await this.prisma.client.user.findFirst({
       where: {
-        username
-      }
+        OR: [
+          {
+            email: input
+          },
+          { username: input },
+        ],
+      },
     })
     return !!isExist;
   }

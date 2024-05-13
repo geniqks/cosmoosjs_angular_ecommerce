@@ -1,0 +1,8 @@
+{
+  "name": "@packages/types",
+  "version": "1",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "typescript": "~5.4.2"
+  }
+}
