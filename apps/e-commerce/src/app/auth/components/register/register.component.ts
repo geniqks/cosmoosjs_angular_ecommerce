@@ -1,8 +1,9 @@
 import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { HttpResponse } from "@angular/common/http";
-import { Component, inject, type OnInit } from "@angular/core";
+import { Component, OnDestroy, inject, type OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@app/api/services";
+import { SubscriptionManager } from "@app/shared/subscription/services/subscription-manager.service";
 import { WebsocketService } from "@app/shared/websockets/services/websocket.service";
 import { TranslateService } from "@ngx-translate/core";
 import { ISocketReceivedMessage } from "@packages/types";
@@ -14,7 +15,7 @@ import { MessageService } from "primeng/api";
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent extends SubscriptionManager implements OnInit, OnDestroy {
   protected form!: FormGroup;
   protected isLoading!: boolean;
   protected passwordMinLength = 8;
@@ -25,9 +26,9 @@ export class RegisterComponent implements OnInit {
   private websocketService = inject(WebsocketService);
 
   public ngOnInit(): void {
-    this.authService.authState.subscribe((user) => {
+    this.subscriptions.push(this.authService.authState.subscribe((user) => {
       this.handleGoogleRegister(user);
-    });
+    }));
     this.initForm();
   }
 

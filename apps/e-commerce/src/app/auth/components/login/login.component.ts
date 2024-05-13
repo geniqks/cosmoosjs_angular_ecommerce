@@ -1,9 +1,10 @@
 import { SocialAuthService } from "@abacritt/angularx-social-login";
 import { HttpResponse } from "@angular/common/http";
-import { Component, inject, type OnInit } from "@angular/core";
+import { Component, OnDestroy, inject, type OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthLoginInputSchema } from "@app/api/models";
 import { AuthService } from "@app/api/services";
+import { SubscriptionManager } from "@app/shared/subscription/services/subscription-manager.service";
 import { TranslateService } from "@ngx-translate/core";
 import { MessageService } from "primeng/api";
 
@@ -11,7 +12,7 @@ import { MessageService } from "primeng/api";
   selector: "app-auth-login",
   templateUrl: "./login.component.html",
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends SubscriptionManager implements OnInit, OnDestroy {
   protected form!: FormGroup;
   protected apiAuthService = inject(AuthService);
   protected authService = inject(SocialAuthService)
@@ -19,13 +20,13 @@ export class LoginComponent implements OnInit {
   private messageService = inject(MessageService);
 
   public ngOnInit(): void {
-    this.authService.authState.subscribe((user) => {
+    this.subscriptions.push(this.authService.authState.subscribe((user) => {
       this.handleLogin({
         username: user.email,
         googleIdToken: user.idToken,
         googleClientId: user.id,
       });
-    });
+    }));
     this.initForm();
   }
 
