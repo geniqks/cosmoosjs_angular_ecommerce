@@ -36,3 +36,29 @@ export const AuthRegisterInputSchema = OpenapiFactory.generateSchema<user>({
     }
   ]
 })
+
+export const AuthLoginInputSchema = OpenapiFactory.generateSchema<user & { googleIdToken: string, googleClientId: string }>({
+  schemaName: 'AuthLoginInputSchema',
+  params: [
+    {
+      name: 'username',
+      required: true,
+      type: 'string',
+    },
+    {
+      name: 'password',
+      required: false,
+      type: 'string',
+    },
+    {
+      name: 'googleIdToken',
+      required: false,
+      type: 'string',
+    },
+    {
+      name: 'googleClientId',
+      required: false,
+      type: 'string',
+    },
+  ]
+})

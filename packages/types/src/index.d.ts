@@ -8,4 +8,5 @@ export interface ISocketMessage<T> {
 export interface ISocketReceivedMessage {
   control: string;
   value: string | boolean;
+  source?: string;
 }

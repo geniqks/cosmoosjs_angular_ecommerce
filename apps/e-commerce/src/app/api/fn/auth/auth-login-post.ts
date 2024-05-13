@@ -6,13 +6,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { AuthLoginInputSchema } from '../../models/auth-login-input-schema';
 
 export interface AuthLoginPost$Params {
+      body?: AuthLoginInputSchema
 }
 
 export function authLoginPost(http: HttpClient, rootUrl: string, params?: AuthLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, authLoginPost.PATH, 'post');
   if (params) {
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(

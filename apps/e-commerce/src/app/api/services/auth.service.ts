@@ -27,7 +27,7 @@ export class AuthService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `authLoginPost()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   authLoginPost$Response(params?: AuthLoginPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return authLoginPost(this.http, this.rootUrl, params, context);
@@ -37,7 +37,7 @@ export class AuthService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `authLoginPost$Response()` instead.
    *
-   * This method doesn't expect any request body.
+   * This method sends `application/json` and handles request body of type `application/json`.
    */
   authLoginPost(params?: AuthLoginPost$Params, context?: HttpContext): Observable<void> {
     return this.authLoginPost$Response(params, context).pipe(

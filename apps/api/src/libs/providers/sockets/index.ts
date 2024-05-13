@@ -55,12 +55,8 @@ export class SocketProvider {
       '/ws',
       upgradeWebSocket(() => {
         return {
-          onOpen(event) {
-            console.log('onOpen');
-          },
           /* an event should always have the structure from the interface ReceviedMessage */
           onMessage: async (event, ws) => {
-            console.log(event.data);
             const response = await this.eventHandler(event.data);
             if (response || response === false) {
               ws.send(JSON.stringify(response));

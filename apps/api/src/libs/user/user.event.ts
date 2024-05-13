@@ -15,7 +15,8 @@ export default [
 
       return {
         value: isExist,
-        control: event.data.control
+        control: event.data.control,
+        source: 'user_exist',
       };
     }
   } as SocketEvent<ISocketReceivedMessage>,

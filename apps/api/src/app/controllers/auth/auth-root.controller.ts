@@ -1,10 +1,11 @@
 import { Post } from "@cosmoosjs/hono-openapi";
+import type { UserLoginInput } from "@libs/auth/auth.interface";
 import type { Prisma } from "@prisma/client";
 import type { Context } from "hono";
 import { StatusCodes } from "http-status-codes";
 import { inject, injectable } from "inversify";
 import type { IController } from "src/interfaces/controllers/controller.interface";
-import { AuthRegisterInputSchema } from "src/libs/auth/auth.schema";
+import { AuthLoginInputSchema, AuthRegisterInputSchema } from "src/libs/auth/auth.schema";
 import { AuthService } from "src/libs/auth/auth.service";
 @injectable()
 export class AuthRootController implements IController {
@@ -21,11 +22,24 @@ export class AuthRootController implements IController {
   @Post({
     path: '/auth/login',
     tags: ['Auth'],
-    request: {},
+    request: {
+      body: {
+        content: {
+          'application/json': {
+            schema: AuthLoginInputSchema,
+          },
+        },
+      },
+    },
     responses: {}
   })
   public async login(ctx?: Context): Promise<unknown> {
-    return;
+    if (ctx) {
+      const body = await ctx.req.json() as UserLoginInput;
+      const loggedUser = await this.authService.login(body);
+      ctx.status(StatusCodes.OK);
+      return ctx.json(loggedUser);
+    };
   }
 
   @Post({

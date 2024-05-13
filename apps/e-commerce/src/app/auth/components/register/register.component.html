@@ -1,6 +1,6 @@
 <div class="mb-5">
   <h1>{{ 'auth.register' | translate }}</h1>
-  <p>{{ 'auth.alreadyRegistered' | translate}} <a href="#">{{ 'auth.connectHere' | translate }}</a></p>
+  <p>{{ 'auth.alreadyRegistered' | translate}} <a routerLink="/auth/login">{{ 'auth.connectHere' | translate }}</a></p>
 </div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="flex">

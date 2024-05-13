@@ -1,6 +1,9 @@
 <div class="mb-5">
   <h1>{{ 'auth.login' | translate }}</h1>
-  <p>{{ 'auth.dontHaveAccount' | translate}} <a href="#">{{ 'auth.createAccount' | translate }}</a></p>
+  <p>
+    {{ 'auth.dontHaveAccount' | translate}} <a routerLink="/auth/register">{{ 'auth.createAccount' | translate }}</a>
+  </p>
+  <small><a routerLink="/auth/reset-password">{{ 'auth.forgotPassword' | translate }}</a></small>
 </div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="card flex">
@@ -12,7 +15,6 @@
       </small>
     </div>
   </div>
-
   <div class="my-4 card flex">
     <div class="flex flex-column gap-2 ">
       <label for="password" class="required-field">{{ 'auth.password' | translate }}</label>

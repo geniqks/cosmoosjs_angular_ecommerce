@@ -26,7 +26,6 @@ export class RegisterComponent implements OnInit {
 
   public ngOnInit(): void {
     this.authService.authState.subscribe((user) => {
-      console.log(user)
       this.handleGoogleRegister(user);
     });
     this.initForm();
@@ -75,7 +74,7 @@ export class RegisterComponent implements OnInit {
         }
       );
       this.websocketService.messages.subscribe(response => {
-        if (response) {
+        if (response && response.source === 'user_exist') {
           if (response.control === controlName) {
             if (response.value) {
               this.form.get(controlName)?.setErrors({ [errorName]: true });
@@ -85,8 +84,7 @@ export class RegisterComponent implements OnInit {
           }
         }
         this.form.updateValueAndValidity();
-      }
-      );
+      });
     }
   }
 
@@ -100,33 +98,30 @@ export class RegisterComponent implements OnInit {
         username: `${user.firstName?.toLocaleLowerCase()}.${user.lastName?.toLocaleLowerCase()}.${Math.random().toString(36).slice(-4)}`
       }
     }).subscribe({
-      next: (data) => {
-        console.log('data');
-        console.log(data);
+      next: () => {
         this.translateService.get('auth.registerSuccess').subscribe((res: string) => {
-          console.log(res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res });
         });
       },
       error: (error: HttpResponse<SocialUser>) => {
-        console.log('error');
-        console.log(error);
         if (error.status === 409) {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+          this.translateService.get('auth.conflict').subscribe((res: string) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+          });
         } else {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+          this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+          });
         }
       },
       complete: () => {
         this.isLoading = false;
       }
-    },
-    )
+    });
   }
 
   private handleLocalRegister() {
     this.isLoading = true;
-    console.log('handleLocalRegister');
     this.apiAuthService.authRegisterPost({
       body: {
         email: this.form.get('email')?.value,
@@ -136,17 +131,20 @@ export class RegisterComponent implements OnInit {
         username: this.form.get('username')?.value
       }
     }).subscribe({
-      next: (data) => {
-        this.translateService.get('registerSuccess').subscribe((res: string) => {
-          console.log(res);
+      next: () => {
+        this.translateService.get('auth.registerSuccess').subscribe((res: string) => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res });
         });
       },
-      error: (error: HttpResponse<any>) => {
-        console.log('error');
-        console.log(error);
+      error: (error: HttpResponse<SocialUser>) => {
         if (error.status === 409) {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+          this.translateService.get('auth.conflict').subscribe((res: string) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+          });
+        } else {
+          this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+          });
         }
         this.isLoading = false;
       },

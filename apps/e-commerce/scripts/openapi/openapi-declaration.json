@@ -17,6 +17,26 @@
       }
     },
     "schemas": {
+      "AuthLoginInputSchema": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "googleIdToken": {
+            "type": "string"
+          },
+          "googleClientId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ]
+      },
       "AuthRegisterInputSchema": {
         "type": "object",
         "properties": {
@@ -54,6 +74,15 @@
         "tags": [
           "Auth"
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthLoginInputSchema"
+              }
+            }
+          }
+        },
         "responses": {}
       }
     },

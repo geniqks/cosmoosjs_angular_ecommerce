@@ -18,4 +18,20 @@ export class AuthRepository {
       }
     );
   }
+
+  public async findUniqueByUsernameOrEmail(input: string): Promise<user | null> {
+    const user = await this.prisma.client.user.findFirst({
+      where: {
+        OR: [
+          {
+            username: input
+          },
+          {
+            email: input
+          }
+        ]
+      },
+    });
+    return user;
+  }
 }

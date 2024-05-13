@@ -22,11 +22,13 @@
     "validateLogin": "Valider la connexion",
     "usernameIsTaken": "Cet utilisateur est déjà pris",
     "emailIsTaken": "Cet email est déjà pris",
-    "registerSuccess": "Votre compte a été créé avec succès, vous pouvez maintenant vous connecter"
+    "registerSuccess": "Votre compte a été créé avec succès, vous pouvez maintenant vous connecter",
+    "conflict": "Un compte existe déjà avec cet email"
   },
   "validation": {
     "requiredField": "Champ obligatoire",
-    "minimumLength": "Longueur minimale de {{value}}"
+    "minimumLength": "Longueur minimale de {{value}}",
+    "anErrorOccurred": "Une erreur est survenue"
   },
   "primeng": {
     "accept": "Oui",
