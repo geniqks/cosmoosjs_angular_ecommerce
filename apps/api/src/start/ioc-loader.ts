@@ -1,5 +1,7 @@
 import { ControllerRoot } from "@app/controllers";
 import { AuthRootController } from "@app/controllers/auth/auth-root.controller";
+import { UserController } from "@app/controllers/user/user.controller";
+import { JwtMiddleware } from "@app/middlewares/jwt";
 import { AuthRepository } from "@libs/auth/auth.repository";
 import { AuthService } from "@libs/auth/auth.service";
 import { TestGuard } from "@libs/guards/test.guard";
@@ -22,12 +24,14 @@ export default (container: Container) => {
   //#endregion
 
   //#region RequestScope
-  container.bind(TestGuard).toSelf().inRequestScope();
   container.bind(AuthRepository).toSelf().inRequestScope();
   container.bind(AuthRootController).toSelf().inRequestScope();
   container.bind(AuthService).toSelf().inRequestScope();
-  container.bind(UserService).toSelf().inRequestScope();
   container.bind(ControllerRoot).toSelf().inRequestScope();
+  container.bind(TestGuard).toSelf().inRequestScope();
+  container.bind(UserController).toSelf().inRequestScope();
   container.bind(UserRepository).toSelf().inRequestScope();
+  container.bind(UserService).toSelf().inRequestScope();
+  container.bind(JwtMiddleware).toSelf().inRequestScope();
   //#endregion
 };

@@ -4,16 +4,19 @@ import { inject, injectable } from 'inversify';
 import type { IController } from 'src/interfaces/controllers/controller.interface';
 import { TestGuard } from 'src/libs/guards/test.guard';
 import { AuthRootController } from './auth/auth-root.controller';
+import { UserController } from './user/user.controller';
 
 @injectable()
 export class ControllerRoot implements IController {
 
   constructor(
     @inject(AuthRootController) private readonly authRootController: AuthRootController,
+    @inject(UserController) private readonly userController: UserController,
   ) { }
 
   public setup(): void {
     this.authRootController.setup();
+    this.userController.setup();
     this.helloWorld();
   }
 

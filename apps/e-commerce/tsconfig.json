@@ -26,6 +26,7 @@
       "@app/*": ["./src/app/*"],
       "@env/*": ["./src/environments/*"],
       "@auth/*": ["./src/app/auth/*"],
+      "@user/*": ["./src/app/user/*"],
       "@shared/*": ["./src/app/shared/*"],
     }
   },

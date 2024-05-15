@@ -10,5 +10,5 @@ export type UserLoginInput = Prisma.userGetPayload<{
   googleClientId: string,
 };
 
-export type UserWithoutPassword = Omit<user, 'password' | 'created_at'>;
+export type UserWithoutPassword = Omit<user, 'password'>;
 export type LoginResponse = UserWithoutPassword & { token: string }

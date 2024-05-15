@@ -64,6 +64,37 @@
           "email",
           "password"
         ]
+      },
+      "AuthResponseSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "name",
+          "lastname",
+          "email",
+          "token"
+        ]
       }
     },
     "parameters": {}
@@ -101,6 +132,25 @@
           }
         },
         "responses": {}
+      }
+    },
+    "/user/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns an error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseSchema"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/": {

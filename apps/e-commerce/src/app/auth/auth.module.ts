@@ -24,6 +24,7 @@ import { LoginComponent } from "./components/login/login.component";
 import { OtpComponent } from "./components/otp/otp.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { ResetPasswordComponent } from "./components/reset-password/reset-password.component";
+import { InternalAuthService } from "./services/internal-auth.service";
 
 const declarations = [
   AuthLayoutComponent,
@@ -62,6 +63,7 @@ const imported = [
     ...primengImports,
   ],
   providers: [
+    InternalAuthService,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

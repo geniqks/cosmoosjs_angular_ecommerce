@@ -25,7 +25,7 @@ export class SocketProvider {
    * @param newEvent event name
    * @param initiator Class that initiates the event
    */
-  public addEvent(newEvent: SocketEvent<unknown>) {
+  public addEvent(newEvent: SocketEvent<any>) {
     const hasEvent = this._events.find(e => e.event === newEvent.event);
     if (hasEvent) {
       this.loggerService.pino.warn(`Event ${newEvent} already exists`);
