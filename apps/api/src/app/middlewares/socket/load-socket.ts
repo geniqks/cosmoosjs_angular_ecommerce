@@ -13,6 +13,7 @@ export async function loadSocketsEvents() {
     if (Array.isArray(loadedEvent.default)) {
       for (const event of loadedEvent.default) {
         const socketProvider = IocContainer.container.get(SocketProvider);
+        //@ts-ignore TODO: fix ça
         socketProvider.addEvent(event);
       }
     }

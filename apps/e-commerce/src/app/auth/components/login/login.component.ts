@@ -1,6 +1,7 @@
 import { SocialAuthService } from "@abacritt/angularx-social-login";
 import { HttpResponse } from "@angular/common/http";
-import { Component, OnDestroy, inject, type OnInit } from "@angular/core";
+import { Component, DestroyRef, inject, type OnInit } from "@angular/core";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthLoginInputSchema } from "@app/api/models";
 import { AuthService } from "@app/api/services";
@@ -12,12 +13,13 @@ import { MessageService } from "primeng/api";
   selector: "app-auth-login",
   templateUrl: "./login.component.html",
 })
-export class LoginComponent extends SubscriptionManager implements OnInit, OnDestroy {
+export class LoginComponent extends SubscriptionManager implements OnInit {
   protected form!: FormGroup;
   protected apiAuthService = inject(AuthService);
   protected authService = inject(SocialAuthService)
   private translateService = inject(TranslateService);
   private messageService = inject(MessageService);
+  private destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this.subscriptions.push(this.authService.authState.subscribe((user) => {
@@ -53,16 +55,18 @@ export class LoginComponent extends SubscriptionManager implements OnInit, OnDes
   private handleLogin(body?: AuthLoginInputSchema) {
     this.apiAuthService.authLoginPost({
       body,
-    }).subscribe({
-      next: () => {
-        // redirect to /
-      },
-      error: (error: HttpResponse<unknown>) => {
-        console.error(error);
-        this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
-        });
-      }
     })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          // redirect to /
+        },
+        error: (error: HttpResponse<unknown>) => {
+          console.error(error);
+          this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+          });
+        }
+      })
   }
 }

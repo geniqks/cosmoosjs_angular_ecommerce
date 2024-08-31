@@ -1,6 +1,7 @@
 import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { HttpResponse } from "@angular/common/http";
-import { Component, OnDestroy, inject, type OnInit } from "@angular/core";
+import { Component, DestroyRef, inject, type OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@app/api/services";
 import { SubscriptionManager } from "@app/shared/subscription/services/subscription-manager.service";
@@ -15,7 +16,7 @@ import { MessageService } from "primeng/api";
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })
-export class RegisterComponent extends SubscriptionManager implements OnInit, OnDestroy {
+export class RegisterComponent extends SubscriptionManager implements OnInit {
   protected form!: FormGroup;
   protected isLoading!: boolean;
   protected passwordMinLength = 8;
@@ -24,6 +25,7 @@ export class RegisterComponent extends SubscriptionManager implements OnInit, On
   private messageService = inject(MessageService);
   private translateService = inject(TranslateService);
   private websocketService = inject(WebsocketService);
+  private destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this.subscriptions.push(this.authService.authState.subscribe((user) => {
@@ -98,27 +100,29 @@ export class RegisterComponent extends SubscriptionManager implements OnInit, On
         password: Math.random().toString(36).slice(-8),
         username: `${user.firstName?.toLocaleLowerCase()}.${user.lastName?.toLocaleLowerCase()}.${Math.random().toString(36).slice(-4)}`
       }
-    }).subscribe({
-      next: () => {
-        this.translateService.get('auth.registerSuccess').subscribe((res: string) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res });
-        });
-      },
-      error: (error: HttpResponse<SocialUser>) => {
-        if (error.status === 409) {
-          this.translateService.get('auth.conflict').subscribe((res: string) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.translateService.get('auth.registerSuccess').subscribe((res: string) => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: res });
           });
-        } else {
-          this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
-          });
+        },
+        error: (error: HttpResponse<SocialUser>) => {
+          if (error.status === 409) {
+            this.translateService.get('auth.conflict').subscribe((res: string) => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+            });
+          } else {
+            this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+            });
+          }
+        },
+        complete: () => {
+          this.isLoading = false;
         }
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
+      });
   }
 
   private handleLocalRegister() {
