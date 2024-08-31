@@ -5,7 +5,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthLoginInputSchema } from "@app/api/models";
 import { AuthService } from "@app/api/services";
-import { SubscriptionManager } from "@app/shared/subscription/services/subscription-manager.service";
 import { TranslateService } from "@ngx-translate/core";
 import { MessageService } from "primeng/api";
 
@@ -13,7 +12,7 @@ import { MessageService } from "primeng/api";
   selector: "app-auth-login",
   templateUrl: "./login.component.html",
 })
-export class LoginComponent extends SubscriptionManager implements OnInit {
+export class LoginComponent implements OnInit {
   protected form!: FormGroup;
   protected apiAuthService = inject(AuthService);
   protected authService = inject(SocialAuthService)
@@ -22,13 +21,15 @@ export class LoginComponent extends SubscriptionManager implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
-    this.subscriptions.push(this.authService.authState.subscribe((user) => {
-      this.handleLogin({
-        username: user.email,
-        googleIdToken: user.idToken,
-        googleClientId: user.id,
+    this.authService.authState
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        this.handleLogin({
+          username: user.email,
+          googleIdToken: user.idToken,
+          googleClientId: user.id,
+        });
       });
-    }));
     this.initForm();
   }
 

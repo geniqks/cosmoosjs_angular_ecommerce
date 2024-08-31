@@ -4,7 +4,6 @@ import { Component, DestroyRef, inject, type OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@app/api/services";
-import { SubscriptionManager } from "@app/shared/subscription/services/subscription-manager.service";
 import { WebsocketService } from "@app/shared/websockets/services/websocket.service";
 import { TranslateService } from "@ngx-translate/core";
 import { ISocketReceivedMessage } from "@packages/types";
@@ -16,7 +15,7 @@ import { MessageService } from "primeng/api";
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.scss"],
 })
-export class RegisterComponent extends SubscriptionManager implements OnInit {
+export class RegisterComponent implements OnInit {
   protected form!: FormGroup;
   protected isLoading!: boolean;
   protected passwordMinLength = 8;
@@ -28,9 +27,11 @@ export class RegisterComponent extends SubscriptionManager implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
-    this.subscriptions.push(this.authService.authState.subscribe((user) => {
-      this.handleGoogleRegister(user);
-    }));
+    this.authService.authState
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((user) => {
+        this.handleGoogleRegister(user);
+      });
     this.initForm();
   }
 
@@ -76,18 +77,20 @@ export class RegisterComponent extends SubscriptionManager implements OnInit {
           }
         }
       );
-      this.websocketService.messages.subscribe(response => {
-        if (response && response.source === 'user_exist') {
-          if (response.control === controlName) {
-            if (response.value) {
-              this.form.get(controlName)?.setErrors({ [errorName]: true });
-            } else {
-              this.form.get(controlName)?.setErrors(null);
+      this.websocketService.messages
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(response => {
+          if (response && response.source === 'user_exist') {
+            if (response.control === controlName) {
+              if (response.value) {
+                this.form.get(controlName)?.setErrors({ [errorName]: true });
+              } else {
+                this.form.get(controlName)?.setErrors(null);
+              }
             }
           }
-        }
-        this.form.updateValueAndValidity();
-      });
+          this.form.updateValueAndValidity();
+        });
     }
   }
 
@@ -135,27 +138,29 @@ export class RegisterComponent extends SubscriptionManager implements OnInit {
         password: this.form.get('password')?.value,
         username: this.form.get('username')?.value
       }
-    }).subscribe({
-      next: () => {
-        this.translateService.get('auth.registerSuccess').subscribe((res: string) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res });
-        });
-      },
-      error: (error: HttpResponse<SocialUser>) => {
-        if (error.status === 409) {
-          this.translateService.get('auth.conflict').subscribe((res: string) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
-          });
-        } else {
-          this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
-          });
-        }
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
     })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.translateService.get('auth.registerSuccess').subscribe((res: string) => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: res });
+          });
+        },
+        error: (error: HttpResponse<SocialUser>) => {
+          if (error.status === 409) {
+            this.translateService.get('auth.conflict').subscribe((res: string) => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+            });
+          } else {
+            this.translateService.get('validation.anErrorOccurred').subscribe((res: string) => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: res });
+            });
+          }
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      })
   }
 }
